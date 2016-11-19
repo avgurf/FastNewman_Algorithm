@@ -29,7 +29,7 @@
 
 #if !defined(TUPLE_INCLUDED)
 #define TUPLE_INCLUDED
-struct tuple {
+struct tuple{
 	double    m;					// stored value
 	int		i;					// row index
 	int		j;					// column index
@@ -321,15 +321,16 @@ int  maxheap::heapSize()    { return heaplimit-1; }
 
 void maxheap::printHeap() {
 	for (int i=1; i<heaplimit; i++) {
-		cout << A[i].d <<"\t["<<A[i].d->k<<"]\tdQ = "<<A[i].d->m<<"\t"<<A[i].d->i<<" -> "<<A[i].d->j<<"\n"; }
+		cout << A[i].d <<"\t["<<A[i].d->k<<"]\tdQ = "<<A[i].d->m<<"\t"<<A[i].d->i-1<<" -> "<<A[i].d->j-1<<"\n"; }
 	return;
 }
 
 void maxheap::printHeapTop10() {
 	int limit;
 	if (heaplimit>10) { limit = 11; } else { limit = heaplimit; }
+	cout << "A[i].d\t[A[i].d->k]\tdQ = A[i].d->m\tso -> si\n";
 	for (int i=1; i<limit; i++) {
-		cout << A[i].d <<"\t["<<A[i].d->k<<"]\tdQ = "<<A[i].d->m<<"\t"<<A[i].d->i<<" -> "<<A[i].d->j<<"\n"; }
+		cout << A[i].d <<"\t["<<A[i].d->k<<"]\tdQ = "<<A[i].d->m<<"\t"<<A[i].d->i-1<<" -> "<<A[i].d->j-1<<"\n"; }
 	return;
 }
 

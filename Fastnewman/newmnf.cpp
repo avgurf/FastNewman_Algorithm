@@ -4,6 +4,7 @@
 #include "stdlib.h"
 #include "time.h"
 #include "math.h"
+#include <stdio.h>
 
 #include "maxheap.h"
 #include "vektor.h"
@@ -27,7 +28,7 @@ edge::~edge() {}
 
 // ------------------------------------------------------------------------------------
 // Nodenub object - defined by a *node pointer and *node pointer 
-struct nodenub {
+ struct nodenub {
 	tuple	*heap_ptr;			// pointer to node(max,i,j) in max-heap of row maxes
 	vektor    *v;					// pointer stored vector for (i,j)
 };
@@ -140,19 +141,19 @@ double supportAve;
 
 
 
-void main(){
+int main(){
 	
 	int i;
 	edge   *current;
 	readInputFile();
-	/*for(i =0;i<gparm.n;i++){
+	for(i =0;i<gparm.n;i++){
 		current  = &e[i];
 		while(current!=NULL){
 
-		cout <<" e: ["<< i <<"] :"<< current->so<<"\t"<< current->si<<"\t"<<endl;
+		cout <<" e: ["<< i <<"] :"<< current->so-1<<"\t"<< current->si-1<<"\t"<<endl;
 		current=current->next;
 		}
-	}*/
+	}
 				// Allocate data structures for main loop
 	a     = new double [gparm.maxid];
 	Q     = new double [gparm.n+1];
@@ -201,19 +202,19 @@ void main(){
 		// Merge the chosen communities
 		cout << "\tdQ = " << dQmax.m << "\t  |H| = " << h->heapSize() << "\n";
 		if (dq[dQmax.i].v == NULL || dq[dQmax.j].v == NULL) {
-			cout << "WARNING: invalid join (" << dQmax.i << " " << dQmax.j << ") found at top of heap\n";// cin >> pauseme;
+			cout << "WARNING: invalid join (" << dQmax.i-1 << " " << dQmax.j-1 << ") found at top of heap\n";// cin >> pauseme;
 		}
 		isupport = dq[dQmax.i].v->returnNodecount();
 		jsupport = dq[dQmax.j].v->returnNodecount();
 		if (isupport < jsupport) {
-			cout << "  join: " << dQmax.i << " -> " << dQmax.j << "\t";
-			cout << "(" << isupport << " -> " << jsupport << ")\n";
+			cout << "  join: " << dQmax.i-1 << " -> " << dQmax.j-1 << "\t";
+			cout << "(" << isupport-1 << " -> " << jsupport-1 << ")\n";
 			mergeCommunities(dQmax.i, dQmax.j);	// merge community i into community j
 			joins[t].x = dQmax.i;				// record merge of i(x) into j(y)
 			joins[t].y = dQmax.j;				// 
 		} else {								// 
-			cout << "  join: " << dQmax.i << " <- " << dQmax.j << "\t";
-			cout << "(" << isupport << " <- " << jsupport << ")\n";
+			cout << "  join: " << dQmax.i-1 << " <- " << dQmax.j-1 << "\t";
+			cout << "(" << isupport-1 << " <- " << jsupport-1 << ")\n";
 			dq[dQmax.i].heap_ptr = dq[dQmax.j].heap_ptr; // take community j's heap pointer
 			dq[dQmax.i].heap_ptr->i = dQmax.i;			//   mark it as i's
 			dq[dQmax.i].heap_ptr->j = dQmax.j;			//   mark it as i's
@@ -236,10 +237,12 @@ void main(){
 		
 		t++;			// increment time
 	
+		cout<<"Press any key...";
+		getchar();
 	}
 							
-	
-	return;
+	cout << "Q["<<t-1<<"] = "<<Q[t-1];
+	return 0;
 }
 
 // ------------------------------------------------------------------------------------
@@ -336,7 +339,7 @@ void mergeCommunities(int i, int j){
 	int t = 1;
 	list    = dq[i].v->returnTreeAsList();			// get a list of items in dq[i].v
 	current = list;
-	cout << "stepping through the "<<dq[i].v->returnNodecount() << " elements of community " << i << endl;
+	cout << "stepping through the "<<dq[i].v->returnNodecount() << " elements of community " << i-1 << endl;
 	while (current!=NULL){
 		if (current->x != j){
 			if (dq[j].v->findItem(current->x)){
@@ -361,7 +364,7 @@ void mergeCommunities(int i, int j){
 		temp = NULL;
 		t++;
 	}
-	dq[j].v->printTree();
+	//dq[j].v->printTree();
 	dq[j].v->deleteItem(i);
 	newMax = dq[j].v->returnMaxStored();
 	h->updateItem(dq[j].heap_ptr, newMax);
